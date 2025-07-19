@@ -81,6 +81,8 @@
         .tour-spotlight {
             box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
         }
+        
+        /* PERFECTED ROULETTE WHEEL - From Reference */
         .roulette-wheel {
             position: relative;
             width: 16rem;
@@ -88,11 +90,16 @@
             border-radius: 50%;
             border: 8px solid #d1d5db;
             background: conic-gradient(from 0deg,
-                #ef4444 0deg 180deg,     /* $5 - 50% */
-                #22c55e 180deg 252deg,   /* $10 - 20% */
-                #3b82f6 252deg 288deg,   /* $15 - 10% */
-                #8b5cf6 288deg 324deg,   /* $25 - 10% */
-                #f59e0b 324deg 360deg    /* $30 - 10% */
+                #ef4444 0deg 36deg,     /* $5 - 10% */
+                #22c55e 36deg 72deg,    /* $10 - 10% */
+                #ef4444 72deg 108deg,   /* $5 - 10% */
+                #22c55e 108deg 144deg,  /* $15 - 10% */
+                #ef4444 144deg 180deg,  /* $5 - 10% */
+                #22c55e 180deg 216deg,  /* $10 - 10% */
+                #ef4444 216deg 252deg,  /* $5 - 10% */
+                #8b5cf6 252deg 288deg,  /* $25 - 10% */
+                #ef4444 288deg 324deg,  /* $5 - 10% */
+                #f59e0b 324deg 360deg   /* $30 - 10% */
             );
             transition: transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
@@ -115,12 +122,17 @@
             top: 50%;
             left: 50%;
         }
-        /* Prize wheel positioning */
-        .roulette-number:nth-child(1) { transform: translate(-50%, -50%) rotate(90deg) translateY(-5rem) rotate(-90deg); }   /* $5 at bottom */
-        .roulette-number:nth-child(2) { transform: translate(-50%, -50%) rotate(216deg) translateY(-5rem) rotate(-216deg); } /* $10 at 216° */
-        .roulette-number:nth-child(3) { transform: translate(-50%, -50%) rotate(270deg) translateY(-5rem) rotate(-270deg); } /* $15 at 270° */
-        .roulette-number:nth-child(4) { transform: translate(-50%, -50%) rotate(306deg) translateY(-5rem) rotate(-306deg); } /* $25 at 306° */
-        .roulette-number:nth-child(5) { transform: translate(-50%, -50%) rotate(342deg) translateY(-5rem) rotate(-342deg); } /* $30 at 342° */
+        /* Position numbers at the center of each color section - PERFECTED */
+        .roulette-number:nth-child(1) { transform: translate(-50%, -50%) rotate(18deg) translateY(-5rem) rotate(-18deg); }   /* $5 at 18° */
+        .roulette-number:nth-child(2) { transform: translate(-50%, -50%) rotate(54deg) translateY(-5rem) rotate(-54deg); }   /* $10 at 54° */
+        .roulette-number:nth-child(3) { transform: translate(-50%, -50%) rotate(90deg) translateY(-5rem) rotate(-90deg); }   /* $5 at 90° */
+        .roulette-number:nth-child(4) { transform: translate(-50%, -50%) rotate(126deg) translateY(-5rem) rotate(-126deg); } /* $15 at 126° */
+        .roulette-number:nth-child(5) { transform: translate(-50%, -50%) rotate(162deg) translateY(-5rem) rotate(-162deg); } /* $5 at 162° */
+        .roulette-number:nth-child(6) { transform: translate(-50%, -50%) rotate(198deg) translateY(-5rem) rotate(-198deg); } /* $10 at 198° */
+        .roulette-number:nth-child(7) { transform: translate(-50%, -50%) rotate(234deg) translateY(-5rem) rotate(-234deg); } /* $5 at 234° */
+        .roulette-number:nth-child(8) { transform: translate(-50%, -50%) rotate(270deg) translateY(-5rem) rotate(-270deg); } /* $25 at 270° */
+        .roulette-number:nth-child(9) { transform: translate(-50%, -50%) rotate(306deg) translateY(-5rem) rotate(-306deg); } /* $5 at 306° */
+        .roulette-number:nth-child(10) { transform: translate(-50%, -50%) rotate(342deg) translateY(-5rem) rotate(-342deg); } /* $30 at 342° */
         
         .week-day {
             transition: all 0.3s ease;
@@ -699,19 +711,24 @@
             </div>
             
             <div class="relative mb-8">
-                <!-- Roulette Wheel -->
+                <!-- PERFECTED Roulette Wheel -->
                 <div id="rouletteWheel" class="roulette-wheel mx-auto">
                     <!-- Center dot -->
                     <div class="absolute inset-0 flex items-center justify-center">
                         <div class="w-4 h-4 bg-white rounded-full z-10"></div>
                     </div>
                     
-                    <!-- Prize amounts -->
+                    <!-- Numbers that spin with the wheel - PERFECTLY positioned -->
                     <div class="roulette-numbers">
                         <div class="roulette-number">$5</div>
                         <div class="roulette-number">$10</div>
+                        <div class="roulette-number">$5</div>
                         <div class="roulette-number">$15</div>
+                        <div class="roulette-number">$5</div>
+                        <div class="roulette-number">$10</div>
+                        <div class="roulette-number">$5</div>
                         <div class="roulette-number">$25</div>
+                        <div class="roulette-number">$5</div>
                         <div class="roulette-number">$30</div>
                     </div>
                 </div>
@@ -784,7 +801,7 @@
 
         let currentTourStep = 0;
 
-        // Guided tour steps (made more patient-friendly)
+        // Guided tour steps (patient-friendly)
         const tourSteps = [
             {
                 title: "Welcome to Recovery Rewards! 💰",
@@ -1267,8 +1284,48 @@
             button.disabled = true;
             button.textContent = '🎰 SPINNING... 🎰';
             
+            // Define wheel sections with their exact center angles and prizes
+            const wheelSections = [
+                { angle: 18, prize: 5 },   // $5 section 1
+                { angle: 54, prize: 10 },  // $10 section 1
+                { angle: 90, prize: 5 },   // $5 section 2
+                { angle: 126, prize: 15 }, // $15 section
+                { angle: 162, prize: 5 },  // $5 section 3
+                { angle: 198, prize: 10 }, // $10 section 2
+                { angle: 234, prize: 5 },  // $5 section 4
+                { angle: 270, prize: 25 }, // $25 section
+                { angle: 306, prize: 5 },  // $5 section 5
+                { angle: 342, prize: 30 }  // $30 section
+            ];
+            
+            // Determine winning section based on probabilities
+            const rand = Math.random();
+            let winningSection;
+            
+            if (rand < 0.1) {
+                // 10% chance: $30
+                winningSection = wheelSections[9]; // $30 section
+            } else if (rand < 0.2) {
+                // 10% chance: $25
+                winningSection = wheelSections[7]; // $25 section
+            } else if (rand < 0.3) {
+                // 10% chance: $15
+                winningSection = wheelSections[3]; // $15 section
+            } else if (rand < 0.5) {
+                // 20% chance: $10
+                const tenSections = [wheelSections[1], wheelSections[5]]; // $10 sections
+                winningSection = tenSections[Math.floor(Math.random() * tenSections.length)];
+            } else {
+                // 50% chance: $5
+                const fiveSections = [wheelSections[0], wheelSections[2], wheelSections[4], wheelSections[6], wheelSections[8]]; // $5 sections
+                winningSection = fiveSections[Math.floor(Math.random() * fiveSections.length)];
+            }
+            
+            // Calculate final rotation (multiple spins + landing on winning section)
+            // Pointer is at top (0°), so we need to account for that
+            const finalRotation = 1800 + (360 - winningSection.angle); // 5 full rotations + position
+            
             // Visual animation
-            const finalRotation = 1800 + Math.random() * 360;
             wheel.style.transform = `rotate(${finalRotation}deg)`;
             
             setTimeout(() => {
