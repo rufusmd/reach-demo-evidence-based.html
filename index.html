@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REACH 2.0 - Evidence-Based Recovery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'teal': {
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .screen {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease-in-out;
+        }
+        .screen.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, #14b8a6 0%, #14b8a6 16.67%, #e5e7eb 16.67%, #e5e7eb 100%);
+        }
+        .chat-bubble-sent {
+            background: #14b8a6;
+            color: white;
+            margin-left: 20%;
+            border-radius: 18px 18px 4px 18px;
+        }
+        .chat-bubble-received {
+            background: #f3f4f6;
+            color: #374151;
+            margin-right: 20%;
+            border-radius: 18px 18px 18px 4px;
+        }
+        .points-badge {
+            background: linear-gradient(45deg, #10b981, #14b8a6);
+            animation: pulse 2s infinite;
+        }
+        .streak-badge {
+            background: linear-gradient(45deg, #f59e0b, #eab308);
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px rgba(245, 158, 11, 0.5); }
+            100% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.8); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .roulette-spin {
+            transition: transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .tour-modal {
+            animation: tourSlideIn 0.3s ease-out;
+        }
+        @keyframes tourSlideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .tour-spotlight {
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
+        }
+        .roulette-wheel {
+            position: relative;
+            width: 16rem;
+            height: 16rem;
+            border-radius: 50%;
+            border: 8px solid #d1d5db;
+            background: conic-gradient(from 0deg,
+                #ef4444 0deg 180deg,     /* $5 - 50% */
+                #22c55e 180deg 252deg,   /* $10 - 20% */
+                #3b82f6 252deg 288deg,   /* $15 - 10% */
+                #8b5cf6 288deg 324deg,   /* $25 - 10% */
+                #f59e0b 324deg 360deg    /* $30 - 10% */
+            );
+            transition: transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .roulette-numbers {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+        }
+        .roulette-number {
+            position: absolute;
+            color: white;
+            font-weight: bold;
+            font-size: 0.875rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: 50%;
+            left: 50%;
+        }
+        /* Evidence-based positioning for research accuracy */
+        .roulette-number:nth-child(1) { transform: translate(-50%, -50%) rotate(90deg) translateY(-5rem) rotate(-90deg); }   /* $5 at bottom */
+        .roulette-number:nth-child(2) { transform: translate(-50%, -50%) rotate(216deg) translateY(-5rem) rotate(-216deg); } /* $10 at 216° */
+        .roulette-number:nth-child(3) { transform: translate(-50%, -50%) rotate(270deg) translateY(-5rem) rotate(-270deg); } /* $15 at 270° */
+        .roulette-number:nth-child(4) { transform: translate(-50%, -50%) rotate(306deg) translateY(-5rem) rotate(-306deg); } /* $25 at 306° */
+        .roulette-number:nth-child(5) { transform: translate(-50%, -50%) rotate(342deg) translateY(-5rem) rotate(-342deg); } /* $30 at 342° */
+        
+        .week-day {
+            transition: all 0.3s ease;
+        }
+        .week-day.completed {
+            background: #10b981;
+            color: white;
+            transform: scale(1.1);
+        }
+        .week-day.pending {
+            background: #f59e0b;
+            color: white;
+        }
+        .week-day.missed {
+            background: #ef4444;
+            color: white;
+        }
+        .cash-progress {
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+        }
+        .evidence-badge {
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div class="max-w-sm mx-auto bg-white min-h-screen shadow-lg relative">
+        
+        <!-- Welcome Screen -->
+        <section id="welcome" class="screen active p-8 text-center h-screen flex flex-col justify-center">
+            <div class="mb-12">
+                <div class="w-20 h-20 bg-teal-500 rounded-full mx-auto mb-6 flex items-center justify-center">
+                    <span class="text-3xl text-white">🏆</span>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-4">Recovery Starts Here</h1>
+                <p class="text-gray-600 text-lg">Evidence-based rewards for lasting recovery</p>
+                <div class="mt-4 space-y-2">
+                    <div class="evidence-badge inline-block">3 tests/week • Streak bonuses</div>
+                    <div class="evidence-badge inline-block ml-2">Real cash rewards</div>
+                </div>
+            </div>
+            <button onclick="navigateTo('intake')" class="w-full bg-teal-500 text-white py-4 px-6 rounded-xl text-lg font-semibold hover:bg-teal-600 transition-colors">
+                Begin in ED
+            </button>
+        </section>
+
+        <!-- Quick Intake Screen -->
+        <section id="intake" class="screen p-6 h-screen flex flex-col">
+            <div class="mb-6">
+                <button onclick="navigateTo('welcome')" class="text-teal-500 mb-4">← Back</button>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Quick Intake</h2>
+                <p class="text-sm text-gray-600">Start your evidence-based recovery program!</p>
+            </div>
+            
+            <div class="flex-1 space-y-4 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Patient Name</label>
+                    <input type="text" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500" placeholder="Enter patient's full name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Medicaid ID</label>
+                    <div class="flex space-x-2">
+                        <input type="text" id="medicaidInput" class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500" placeholder="Enter Medicaid ID">
+                        <button onclick="checkEligibility()" class="bg-blue-500 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+                            Verify
+                        </button>
+                    </div>
+                    <div id="eligibilityResult" class="mt-2 hidden">
+                        <div class="p-3 bg-green-50 border border-green-200 rounded-lg">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-green-600">✅</span>
+                                <div class="text-sm">
+                                    <p class="font-semibold text-green-800">Eligible - Targeted Adult Medicaid</p>
+                                    <p class="text-green-600">Route: FFS Medicaid (H0038)</p>
+                                    <p class="text-green-600">County: Salt Lake | No PMHP enrollment</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Ethnicity</label>
+                    <select class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                        <option>Select ethnicity</option>
+                        <option>Hispanic or Latino</option>
+                        <option>Not Hispanic or Latino</option>
+                        <option>Prefer not to answer</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button onclick="initializeProgram()" class="w-full bg-teal-500 text-white py-4 px-6 rounded-xl text-lg font-semibold hover:bg-teal-600 transition-colors">
+                Continue
+            </button>
+        </section>
+
+        <!-- Success + Interactive Tour Screen -->
+        <section id="success" class="screen p-6 h-screen flex flex-col">
+            <div class="text-center mb-6">
+                <div class="text-6xl mb-4">🎉</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Welcome to Evidence-Based Recovery!</h2>
+                <div class="points-badge text-white py-2 px-4 rounded-full inline-block mb-4">
+                    <span class="font-bold">Program Initialized!</span>
+                </div>
+                <p class="text-sm text-gray-600">Your streak starts at 0 • Next test worth 25 points</p>
+            </div>
+            
+            <!-- Interactive Tour Launch -->
+            <div class="flex-1 mb-6 flex flex-col justify-center">
+                <div class="bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl p-6 text-white text-center">
+                    <div class="text-4xl mb-3">🔬</div>
+                    <h3 class="text-lg font-bold mb-2">Ready to explore Evidence-Based CM?</h3>
+                    <p class="text-sm mb-4 opacity-90">Take a quick tour to see how research-backed rewards work: streak escalation, variable-ratio prizes, and CRA integration</p>
+                    <button onclick="startGuidedTour()" class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                        🚀 Start Evidence-Based Tour
+                    </button>
+                </div>
+            </div>
+            
+            <button onclick="navigateTo('dashboard')" class="w-full bg-teal-500 text-white py-4 px-6 rounded-xl text-lg font-semibold hover:bg-teal-600 transition-colors">
+                Skip Tour - Go to Dashboard
+            </button>
+        </section>
+
+        <!-- Dashboard with Footer Navigation -->
+        <section id="dashboard" class="screen h-screen flex flex-col">
+            <!-- Dashboard Content Area -->
+            <div class="flex-1 overflow-y-auto">
+                <!-- Enhanced Wallet View -->
+                <div id="wallet-view" class="dashboard-view p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Evidence-Based Dashboard</h2>
+                    
+                    <!-- Streak & Points Display -->
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="streak-badge text-white p-4 rounded-xl text-center">
+                            <div class="text-2xl font-bold" id="streakDisplay">0</div>
+                            <div class="text-sm">Day Streak 🔥</div>
+                            <div class="text-xs mt-1">Next: <span id="nextPoints">25</span> pts</div>
+                        </div>
+                        <div class="points-badge text-white p-4 rounded-xl text-center">
+                            <div class="text-2xl font-bold" id="pointsDisplay">0</div>
+                            <div class="text-sm">Points Balance</div>
+                            <div class="text-xs mt-1">Spin at 25 pts</div>
+                        </div>
+                    </div>
+
+                    <!-- Cash Earned Progress -->
+                    <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-semibold text-green-800">Cash Earned</h3>
+                            <span class="text-2xl font-bold text-green-600" id="cashEarned">$0.00</span>
+                        </div>
+                        <div class="w-full bg-green-200 rounded-full h-3 mb-2">
+                            <div class="cash-progress h-3 rounded-full" id="cashProgress" style="width: 0%"></div>
+                        </div>
+                        <div class="text-xs text-green-700">
+                            <span class="evidence-badge">OIG Compliant</span> 
+                            Annual cap: $605.90 • <span id="cashRemaining">$605.90</span> remaining
+                        </div>
+                    </div>
+
+                    <!-- Weekly Progress -->
+                    <div class="bg-white border-2 border-gray-200 rounded-xl p-4 mb-6">
+                        <h3 class="font-semibold text-gray-800 mb-3">This Week's Tests (M/W/F Schedule)</h3>
+                        <div class="flex justify-between items-center">
+                            <div class="flex space-x-2">
+                                <div class="week-day w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-sm font-semibold" id="mon">M</div>
+                                <div class="week-day w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-sm font-semibold" id="wed">W</div>
+                                <div class="week-day w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-sm font-semibold" id="fri">F</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-lg font-bold text-green-600" id="weeklyBonus">$0</div>
+                                <div class="text-xs text-gray-600">Weekly bonus</div>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <span class="evidence-badge">Research-Based</span>
+                            <span class="text-xs text-gray-600 ml-2">Complete all 3 tests this week for $5 bonus!</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Roulette Section -->
+                    <div class="bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl p-6 text-white mb-6">
+                        <div class="text-center">
+                            <h3 class="text-lg font-semibold mb-2">Evidence-Based Roulette</h3>
+                            <p class="text-sm opacity-90 mb-4">Research-proven prize draw • $10 expected value</p>
+                            <button id="rouletteButton" onclick="checkRouletteEligibility()" class="bg-gray-300 text-gray-600 px-6 py-2 rounded-full font-semibold opacity-75 cursor-not-allowed flex items-center justify-center mx-auto">
+                                🔒 Earn 25 points to unlock spin
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-semibold mb-3">Recent Activity</h3>
+                    <div class="space-y-3" id="activityFeed">
+                        <div class="text-center p-6 text-gray-500">
+                            <p>Complete your first test to start earning!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drug Tests View -->
+                <div id="tests-view" class="dashboard-view p-6 hidden">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Evidence-Based Testing</h2>
+                    
+                    <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white mb-6">
+                        <h3 class="text-lg font-semibold mb-2">Streak-Based Rewards</h3>
+                        <p class="mb-4">Your next negative test is worth <span id="testRewardPoints" class="font-bold">25</span> points!</p>
+                        <div class="text-sm opacity-90 mb-4">
+                            <span class="evidence-badge bg-white text-green-600">Formula: 25 + (5 × streak)</span>
+                        </div>
+                        <button onclick="startDrugTest()" class="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold">
+                            🧪 Start Guided Test
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <h3 class="font-semibold">Test History</h3>
+                        <div class="bg-gray-50 rounded-lg p-4 text-center" id="testHistory">
+                            <p class="text-gray-600 text-sm">No tests completed yet</p>
+                            <p class="text-gray-500 text-xs mt-1">Complete your first test to start your streak!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CRA Sessions View -->
+                <div id="therapy-view" class="dashboard-view p-6 hidden">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">CRA Sessions</h2>
+                    
+                    <div class="bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl p-6 text-white mb-6">
+                        <h3 class="text-lg font-semibold mb-2">Week <span id="currentWeek">1</span>: Functional Analysis</h3>
+                        <p class="mb-4">Understanding your triggers and patterns</p>
+                        <div class="text-sm opacity-90 mb-4">
+                            <span class="evidence-badge bg-white text-orange-600">CRA + CM = Lowest NNT</span>
+                        </div>
+                        <button onclick="completeCRASession()" class="bg-white text-orange-600 px-4 py-2 rounded-lg font-semibold">
+                            📚 Complete Session (+5 pts)
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-3" id="craSchedule">
+                        <!-- CRA schedule will be populated -->
+                    </div>
+                </div>
+
+                <!-- My Team View -->
+                <div id="team-view" class="dashboard-view p-6 hidden">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">My Care Team</h2>
+                    
+                    <div class="space-y-4 mb-6">
+                        <div class="bg-teal-50 rounded-lg p-4 border border-teal-200">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-teal-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                    C
+                                </div>
+                                <div>
+                                    <p class="font-semibold">Cam Rodriguez</p>
+                                    <p class="text-sm text-gray-600">MSW - CRA Specialist</p>
+                                    <p class="text-xs text-teal-600">Online now</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                    Z
+                                </div>
+                                <div>
+                                    <p class="font-semibold">Zach Thompson</p>
+                                    <p class="text-sm text-gray-600">CPSS - Testing Coordinator</p>
+                                    <p class="text-xs text-gray-500">Last seen 2h ago</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- To-Dos View -->
+                <div id="todos-view" class="dashboard-view p-6 hidden">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Evidence-Based Activities</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="border border-orange-200 bg-orange-50 rounded-lg p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="font-semibold">Take Drug Test</p>
+                                    <p class="text-sm text-gray-600">Next reward: <span id="todoTestPoints">25</span> points</p>
+                                </div>
+                                <span class="evidence-badge">Streak: <span id="todoStreak">0</span></span>
+                            </div>
+                        </div>
+                        
+                        <div class="border border-green-200 bg-green-50 rounded-lg p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="font-semibold">Complete CRA Homework</p>
+                                    <p class="text-sm text-gray-600">List 5 sober activities</p>
+                                </div>
+                                <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm font-semibold">+5 pts</span>
+                            </div>
+                        </div>
+                        
+                        <div class="border border-blue-200 bg-blue-50 rounded-lg p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="font-semibold">Perfect Week Goal</p>
+                                    <p class="text-sm text-gray-600">Complete M/W/F tests</p>
+                                </div>
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm font-semibold">+$5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile View -->
+                <div id="profile-view" class="dashboard-view p-6 hidden">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Program Progress</h2>
+                    
+                    <div class="text-center mb-6">
+                        <div class="w-20 h-20 bg-teal-500 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
+                            J
+                        </div>
+                        <h3 class="text-xl font-semibold">John Doe</h3>
+                        <p class="text-gray-600">Evidence-Based Program • Week <span id="profileWeek">1</span> of 12</p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-semibold mb-2">Recovery Metrics</h4>
+                            <div class="grid grid-cols-2 gap-4 text-center">
+                                <div>
+                                    <p class="text-2xl font-bold text-teal-500" id="profileStreak">0</p>
+                                    <p class="text-sm text-gray-600">Current Streak</p>
+                                </div>
+                                <div>
+                                    <p class="text-2xl font-bold text-green-500" id="profileCash">$0</p>
+                                    <p class="text-sm text-gray-600">Cash Earned</p>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <span class="evidence-badge">Evidence-Based CM Protocol</span>
+                            </div>
+                        </div>
+                        
+                        <button class="w-full text-red-500 py-3 border border-red-200 rounded-lg">
+                            Emergency Support: (555) 123-4567
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Navigation -->
+            <div class="bg-white border-t border-gray-200 px-2 py-2">
+                <div class="flex justify-around">
+                    <button onclick="showDashboardView('team')" class="dashboard-tab flex flex-col items-center p-1 text-gray-400">
+                        <span class="text-lg mb-1">👥</span>
+                        <span class="text-xs">Team</span>
+                    </button>
+                    <button onclick="showDashboardView('therapy')" class="dashboard-tab flex flex-col items-center p-1 text-gray-400">
+                        <span class="text-lg mb-1">📚</span>
+                        <span class="text-xs">CRA</span>
+                    </button>
+                    <button onclick="showDashboardView('tests')" class="dashboard-tab flex flex-col items-center p-1 text-gray-400">
+                        <span class="text-lg mb-1">🧪</span>
+                        <span class="text-xs">Tests</span>
+                    </button>
+                    <button onclick="showDashboardView('todos')" class="dashboard-tab flex flex-col items-center p-1 text-gray-400">
+                        <span class="text-lg mb-1">📝</span>
+                        <span class="text-xs">To-Do</span>
+                    </button>
+                    <button onclick="showDashboardView('wallet')" class="dashboard-tab flex flex-col items-center p-1 text-teal-500">
+                        <span class="text-lg mb-1">💰</span>
+                        <span class="text-xs">Wallet</span>
+                    </button>
+                    <button onclick="showDashboardView('profile')" class="dashboard-tab flex flex-col items-center p-1 text-gray-400">
+                        <span class="text-lg mb-1">👤</span>
+                        <span class="text-xs">Profile</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Guided Tour Overlay -->
+    <div id="tourOverlay" class="fixed inset-0 bg-black bg-opacity-70 hidden z-50">
+        <!-- Tour Spotlight -->
+        <div id="tourSpotlight" class="absolute bg-white bg-opacity-20 rounded-lg border-4 border-white shadow-2xl transition-all duration-500"></div>
+        
+        <!-- Tour Modal -->
+        <div id="tourModal" class="absolute bg-white rounded-xl p-6 shadow-2xl w-80 max-w-[90vw] tour-modal">
+            <div id="tourContent">
+                <!-- Dynamic content loaded here -->
+            </div>
+            
+            <div class="flex justify-between items-center mt-6">
+                <div id="tourProgress" class="flex space-x-2">
+                    <!-- Progress dots -->
+                </div>
+                
+                <div class="space-x-3">
+                    <button onclick="skipTour()" class="text-gray-500 px-3 py-2 rounded-lg hover:bg-gray-100 text-sm">
+                        Skip
+                    </button>
+                    <button onclick="nextTourStep()" id="tourNextBtn" class="bg-teal-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-teal-600 text-sm">
+                        Next
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Drug Test Simulation Modal -->
+    <div id="drugTestModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="max-w-sm mx-auto bg-white h-full relative">
+            
+            <!-- Video Call Interface -->
+            <div id="videoCall" class="test-step h-full flex flex-col">
+                <div class="bg-black text-white p-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                        <span class="text-sm">Connected with Zach (CPSS)</span>
+                    </div>
+                    <button onclick="closeDrugTest()" class="text-white">✕</button>
+                </div>
+                
+                <div class="flex-1 bg-gray-900 relative">
+                    <!-- Mock video feed -->
+                    <div class="absolute inset-4 bg-blue-900 rounded-lg flex items-center justify-center">
+                        <div class="text-center text-white">
+                            <div class="w-16 h-16 bg-blue-600 rounded-full mx-auto mb-2 flex items-center justify-center">
+                                <span class="text-2xl">👨‍⚕️</span>
+                            </div>
+                            <p class="text-sm">Zach (CPSS)</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Patient video (small corner) -->
+                    <div class="absolute top-4 right-4 w-20 h-28 bg-teal-700 rounded-lg flex items-center justify-center">
+                        <span class="text-white text-2xl">👤</span>
+                    </div>
+                </div>
+                
+                <div class="p-4 bg-white">
+                    <div class="bg-blue-50 p-3 rounded-lg mb-4">
+                        <p class="text-sm text-blue-800">"Hi! Ready for your evidence-based saliva test? This will be worth <span id="currentTestPoints">25</span> points if negative!"</p>
+                    </div>
+                    <button onclick="nextTestStep('seal')" class="w-full bg-teal-500 text-white py-3 rounded-lg font-semibold">
+                        Show Seal & QR Code
+                    </button>
+                </div>
+            </div>
+
+            <!-- QR Code/Seal Step -->
+            <div id="sealStep" class="test-step hidden h-full flex flex-col">
+                <div class="bg-teal-500 text-white p-4 flex items-center justify-between">
+                    <span class="font-semibold">Verify Test Kit</span>
+                    <button onclick="closeDrugTest()" class="text-white">✕</button>
+                </div>
+                
+                <div class="flex-1 p-6 flex flex-col justify-center">
+                    <div class="text-center mb-6">
+                        <div class="w-32 h-32 bg-gray-200 rounded-lg mx-auto mb-4 flex items-center justify-center border-2 border-dashed border-gray-400">
+                            <div class="text-center">
+                                <div class="text-4xl mb-2">📱</div>
+                                <p class="text-xs text-gray-600">QR Code</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600">Show the QR code and tamper-proof seal to your camera</p>
+                    </div>
+                    
+                    <div class="bg-green-50 p-3 rounded-lg mb-4">
+                        <p class="text-sm text-green-800">"Perfect! I can see the seal is intact. This test will add to your streak!"</p>
+                    </div>
+                </div>
+                
+                <div class="p-4">
+                    <button onclick="nextTestStep('sample')" class="w-full bg-teal-500 text-white py-3 rounded-lg font-semibold">
+                        Collect Sample
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sample Collection Step -->
+            <div id="sampleStep" class="test-step hidden h-full flex flex-col">
+                <div class="bg-teal-500 text-white p-4 flex items-center justify-between">
+                    <span class="font-semibold">Collect Sample</span>
+                    <button onclick="closeDrugTest()" class="text-white">✕</button>
+                </div>
+                
+                <div class="flex-1 p-6 flex flex-col justify-center">
+                    <div class="text-center mb-6">
+                        <div class="text-6xl mb-4">🧪</div>
+                        <h3 class="text-lg font-semibold mb-2">Saliva Collection</h3>
+                        <p class="text-sm text-gray-600">Follow the instructions on your test kit</p>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-3 rounded-lg mb-4">
+                        <p class="text-sm text-blue-800">"Take your time. Remember, this is part of your evidence-based recovery program!"</p>
+                    </div>
+                </div>
+                
+                <div class="p-4">
+                    <button onclick="nextTestStep('waiting')" class="w-full bg-teal-500 text-white py-3 rounded-lg font-semibold">
+                        Sample Complete
+                    </button>
+                </div>
+            </div>
+
+            <!-- Waiting/Coaching Step -->
+            <div id="waitingStep" class="test-step hidden h-full flex flex-col">
+                <div class="bg-yellow-500 text-white p-4 flex items-center justify-between">
+                    <span class="font-semibold">Processing Results</span>
+                    <button onclick="closeDrugTest()" class="text-white">✕</button>
+                </div>
+                
+                <div class="flex-1 p-6 flex flex-col justify-center">
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 bg-yellow-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                            <div class="animate-spin text-2xl">⏳</div>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Processing...</h3>
+                        <p class="text-sm text-gray-600">Results typically take 2-3 minutes</p>
+                    </div>
+                    
+                    <div class="bg-green-50 p-3 rounded-lg mb-4">
+                        <p class="text-sm text-green-800">"While we wait: How are you feeling about your recovery journey? The research shows you're on the right path!"</p>
+                    </div>
+                </div>
+                
+                <div class="p-4">
+                    <button onclick="processTestResult()" class="w-full bg-yellow-500 text-white py-3 rounded-lg font-semibold">
+                        Show Results
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Step -->
+            <div id="resultsStep" class="test-step hidden h-full flex flex-col">
+                <div class="bg-green-500 text-white p-4 flex items-center justify-between">
+                    <span class="font-semibold">Test Results</span>
+                    <button onclick="closeDrugTest()" class="text-white">✕</button>
+                </div>
+                
+                <div class="flex-1 p-6 flex flex-col justify-center">
+                    <div class="text-center mb-6">
+                        <div class="text-8xl mb-4" id="finalResultEmoji">🎉</div>
+                        <h3 class="text-2xl font-bold text-green-600 mb-2" id="finalResultText">NEGATIVE!</h3>
+                        <p class="text-lg text-gray-600" id="finalResultSub">Streak extended!</p>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg mb-4">
+                        <p class="text-sm text-green-800 text-center" id="finalResultMsg">"AMAZING! Your streak is now 1 day! Next test will be worth 30 points!"</p>
+                    </div>
+                    
+                    <div class="points-badge text-white py-3 px-6 rounded-full text-center mb-4">
+                        <span class="font-bold text-lg" id="finalPointsEarned">+25 Points Earned!</span>
+                    </div>
+                    
+                    <div id="automaticSpins" class="hidden streak-badge text-white py-2 px-4 rounded-full text-center mb-4">
+                        <span class="font-bold text-sm" id="spinsEarned">🎰 Automatic spin earned!</span>
+                    </div>
+                </div>
+                
+                <div class="p-4">
+                    <button onclick="completeDrugTest()" class="w-full bg-green-500 text-white py-3 rounded-lg font-semibold">
+                        Continue to Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Roulette Modal -->
+    <div id="rouletteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="max-w-sm mx-auto bg-white h-full flex flex-col justify-center p-6">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Evidence-Based Roulette!</h2>
+                <p class="text-gray-600">Research-proven prize draw contingency management</p>
+                <div class="mt-4">
+                    <span class="evidence-badge">$10 Expected Value</span>
+                    <span class="evidence-badge ml-2">25 Point Cost</span>
+                </div>
+            </div>
+            
+            <div class="relative mb-8">
+                <!-- Roulette Wheel -->
+                <div id="rouletteWheel" class="roulette-wheel mx-auto">
+                    <!-- Center dot -->
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-4 h-4 bg-white rounded-full z-10"></div>
+                    </div>
+                    
+                    <!-- Evidence-based prize amounts -->
+                    <div class="roulette-numbers">
+                        <div class="roulette-number">$5</div>
+                        <div class="roulette-number">$10</div>
+                        <div class="roulette-number">$15</div>
+                        <div class="roulette-number">$25</div>
+                        <div class="roulette-number">$30</div>
+                    </div>
+                </div>
+                
+                <!-- Pointer -->
+                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1 z-20">
+                    <div class="w-0 h-0 border-l-4 border-r-4 border-b-8 border-l-transparent border-r-transparent border-b-gray-800"></div>
+                </div>
+            </div>
+            
+            <!-- Probability Display -->
+            <div class="bg-gray-50 rounded-lg p-3 mb-4 text-xs">
+                <p class="font-semibold text-center mb-2">Research-Based Probabilities:</p>
+                <div class="grid grid-cols-5 gap-1 text-center">
+                    <div>$5<br><span class="text-gray-600">50%</span></div>
+                    <div>$10<br><span class="text-gray-600">20%</span></div>
+                    <div>$15<br><span class="text-gray-600">10%</span></div>
+                    <div>$25<br><span class="text-gray-600">10%</span></div>
+                    <div>$30<br><span class="text-gray-600">10%</span></div>
+                </div>
+            </div>
+            
+            <button onclick="spinRoulette()" id="spinButton" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-4 rounded-xl text-lg font-bold">
+                🎰 Spin Evidence-Based Roulette! 🎰
+            </button>
+            
+            <div id="spinResult" class="hidden mt-6 text-center">
+                <div class="text-6xl mb-2">🎊</div>
+                <h3 class="text-3xl font-bold text-green-600 mb-2" id="winAmount">YOU WON $15!</h3>
+                <p class="text-gray-600 mb-4">Real cash added to your recovery account!</p>
+                <button onclick="closeRoulette()" class="bg-teal-500 text-white px-6 py-3 rounded-lg font-semibold">
+                    Collect Winnings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Evidence-based program state
+        let programState = {
+            // Patient tracking
+            enrollmentDate: new Date(),
+            currentWeek: 1,
+            
+            // Evidence-based CM mechanics
+            streak: 0,                    // consecutive negative tests
+            nextPoints: 25,               // 25 + (5 * streak)
+            pointBalance: 0,              // current points available
+            weekNegatives: 0,             // tests completed this week (0-3)
+            cashEarned: 0,                // total cash earned ($)
+            
+            // Weekly tracking (M/W/F schedule)
+            thisWeek: {
+                mon: null,                // null, 'negative', 'positive', 'missed'
+                wed: null,
+                fri: null
+            },
+            
+            // CRA progress
+            craSessionsDone: 0,           // 0-12
+            currentCraSession: 1,
+            
+            // Evidence-based caps
+            maxCash: 605.90,              // OIG-compliant annual cap
+            
+            // Audit trail
+            incentivesLog: [],
+            testHistory: []
+        };
+
+        let currentTourStep = 0;
+
+        // Evidence-based guided tour steps
+        const tourSteps = [
+            {
+                title: "Welcome to Evidence-Based CM! 🔬",
+                content: "This app uses research-proven contingency management. Your rewards escalate with your streak: 25 points for first negative test, then +5 more for each consecutive negative!",
+                target: null,
+                position: "center",
+                action: "highlight-science"
+            },
+            {
+                title: "Streak-Based Escalation 🔥",
+                content: "See your current streak and next reward amount. Research shows escalating rewards improve outcomes by ~15 percentage points vs. flat rewards.",
+                target: ".streak-badge",
+                position: "bottom",
+                action: "show-dashboard"
+            },
+            {
+                title: "Evidence-Based Testing 🧪",
+                content: "Your testing follows the proven 3×/week schedule (Monday/Wednesday/Friday) that shows the best outcomes in clinical trials.",
+                target: "button[onclick=\"showDashboardView('tests')\"]",
+                position: "top",
+                action: "show-tests"
+            },
+            {
+                title: "Complete Your First Test 📱",
+                content: "Let's simulate a negative test to see the evidence-based escalation in action. Notice how your streak affects your next reward!",
+                target: "button[onclick=\"startDrugTest()\"]",
+                position: "bottom",
+                action: "start-test"
+            },
+            {
+                title: "Research-Backed Roulette 🎰",
+                content: "Our roulette uses proven prize-draw probabilities: $5(50%), $10(20%), $15(10%), $25(10%), $30(10%) with $10 expected value per research.",
+                target: "#rouletteButton",
+                position: "top",
+                action: "show-roulette"
+            },
+            {
+                title: "CRA Integration 📚",
+                content: "Combined Contingency Management + Community Reinforcement Approach shows the lowest Number Needed to Treat in addiction research.",
+                target: "button[onclick=\"showDashboardView('therapy')\"]",
+                position: "top",
+                action: "show-cra"
+            },
+            {
+                title: "OIG-Compliant Cap 💰",
+                content: "Your annual cash cap is $605.90 (inflation-adjusted OIG safe harbor). The app enforces this automatically for regulatory compliance.",
+                target: "#cashEarned",
+                position: "bottom",
+                action: "show-compliance"
+            },
+            {
+                title: "Ready for Evidence-Based Recovery! 🎉",
+                content: "You now understand how this research-proven system works. Start your recovery journey with confidence in the science!",
+                target: null,
+                position: "center",
+                action: "complete"
+            }
+        ];
+
+        // Core evidence-based algorithm: onTestResult
+        function onTestResult(result) {
+            const isNegative = result === 'negative';
+            
+            if (isNegative) {
+                // Award points based on evidence-based escalation
+                const pointsEarned = programState.nextPoints;
+                programState.pointBalance += pointsEarned;
+                programState.streak += 1;
+                programState.nextPoints = 25 + (programState.streak * 5); // Evidence-based formula
+                programState.weekNegatives += 1;
+                
+                // Log the incentive
+                logIncentive(pointsEarned, `Negative test - streak ${programState.streak}`);
+                
+                // Update weekly progress
+                updateWeeklyProgress(result);
+                
+                // Automatic spins while balance >= 25
+                let spinsEarned = 0;
+                while (programState.pointBalance >= 25) {
+                    const winAmount = awardSpin();
+                    spinsEarned++;
+                    if (winAmount > 0) {
+                        loadCash(winAmount, `Automatic roulette win - spin ${spinsEarned}`);
+                    }
+                }
+                
+                // Check for weekly bonus (evidence-based: $5 for 3 negative tests)
+                if (programState.weekNegatives === 3) {
+                    loadCash(5, "Perfect week bonus");
+                    resetWeeklyProgress();
+                }
+                
+                // Add to test history
+                programState.testHistory.push({
+                    date: new Date(),
+                    result: 'negative',
+                    pointsEarned: pointsEarned,
+                    streakAtTest: programState.streak,
+                    spinsEarned: spinsEarned
+                });
+                
+                return {
+                    pointsEarned,
+                    spinsEarned,
+                    newStreak: programState.streak,
+                    weeklyBonus: programState.weekNegatives === 3
+                };
+                
+            } else {
+                // Reset on positive/missed (evidence-based reset)
+                programState.streak = 0;
+                programState.nextPoints = 25;
+                programState.weekNegatives = 0;
+                updateWeeklyProgress(result);
+                
+                // Add to test history
+                programState.testHistory.push({
+                    date: new Date(),
+                    result: 'positive',
+                    pointsEarned: 0,
+                    streakAtTest: 0,
+                    spinsEarned: 0
+                });
+                
+                return {
+                    pointsEarned: 0,
+                    spinsEarned: 0,
+                    newStreak: 0,
+                    weeklyBonus: false
+                };
+            }
+        }
+
+        // Evidence-based roulette with research probabilities
+        function awardSpin() {
+            programState.pointBalance -= 25;
+            
+            // Research-backed probabilities: EV = $10
+            const rand = Math.random();
+            let winAmount;
+            
+            if (rand < 0.5) {
+                winAmount = 5;   // 50%
+            } else if (rand < 0.7) {
+                winAmount = 10;  // 20%
+            } else if (rand < 0.8) {
+                winAmount = 15;  // 10%
+            } else if (rand < 0.9) {
+                winAmount = 25;  // 10%
+            } else {
+                winAmount = 30;  // 10%
+            }
+            
+            return winAmount;
+        }
+
+        // Load cash with OIG-compliant cap enforcement
+        function loadCash(amount, reason) {
+            if (programState.cashEarned + amount > programState.maxCash) {
+                // Enforce cap
+                const remainingCap = programState.maxCash - programState.cashEarned;
+                if (remainingCap > 0) {
+                    programState.cashEarned += remainingCap;
+                    logIncentive(remainingCap, `${reason} (capped at annual limit)`);
+                    alert(`You've reached the annual cap of $${programState.maxCash.toFixed(2)}!`);
+                }
+                return remainingCap;
+            } else {
+                programState.cashEarned += amount;
+                logIncentive(amount, reason);
+                return amount;
+            }
+        }
+
+        // Update weekly progress
+        function updateWeeklyProgress(result) {
+            const today = new Date().getDay();
+            let dayKey;
+            
+            // Map to M/W/F evidence-based schedule
+            if (today === 1) dayKey = 'mon';
+            else if (today === 3) dayKey = 'wed'; 
+            else if (today === 5) dayKey = 'fri';
+            else {
+                // For demo, use next available day
+                if (!programState.thisWeek.mon) dayKey = 'mon';
+                else if (!programState.thisWeek.wed) dayKey = 'wed';
+                else dayKey = 'fri';
+            }
+            
+            programState.thisWeek[dayKey] = result;
+        }
+
+        // Reset weekly progress
+        function resetWeeklyProgress() {
+            programState.thisWeek = { mon: null, wed: null, fri: null };
+            programState.weekNegatives = 0;
+        }
+
+        // Log incentive for audit trail
+        function logIncentive(amount, reason) {
+            programState.incentivesLog.push({
+                timestamp: new Date().toISOString(),
+                amount: amount,
+                reason: reason,
+                type: typeof amount === 'number' ? (amount >= 1 ? 'cash' : 'points') : 'points',
+                cumulativeCash: programState.cashEarned
+            });
+        }
+
+        // Initialize evidence-based program
+        function initializeProgram() {
+            programState.enrollmentDate = new Date();
+            updateDisplay();
+            navigateTo('success');
+            logEvent('EVIDENCE_BASED_PROGRAM_INITIALIZED', 'INTAKE');
+        }
+
+        // Update all displays
+        function updateDisplay() {
+            // Basic stats
+            document.getElementById('streakDisplay').textContent = programState.streak;
+            document.getElementById('pointsDisplay').textContent = programState.pointBalance;
+            document.getElementById('nextPoints').textContent = programState.nextPoints;
+            document.getElementById('testRewardPoints').textContent = programState.nextPoints;
+            document.getElementById('currentTestPoints').textContent = programState.nextPoints;
+            document.getElementById('currentWeek').textContent = programState.currentWeek;
+            document.getElementById('todoTestPoints').textContent = programState.nextPoints;
+            document.getElementById('todoStreak').textContent = programState.streak;
+            
+            // Cash tracking
+            document.getElementById('cashEarned').textContent = `$${programState.cashEarned.toFixed(2)}`;
+            document.getElementById('cashRemaining').textContent = `$${(programState.maxCash - programState.cashEarned).toFixed(2)}`;
+            const cashPercent = (programState.cashEarned / programState.maxCash) * 100;
+            document.getElementById('cashProgress').style.width = `${Math.min(cashPercent, 100)}%`;
+            
+            // Profile stats
+            if (document.getElementById('profileWeek')) {
+                document.getElementById('profileWeek').textContent = programState.currentWeek;
+                document.getElementById('profileStreak').textContent = programState.streak;
+                document.getElementById('profileCash').textContent = `$${programState.cashEarned.toFixed(2)}`;
+            }
+            
+            // Weekly progress
+            updateWeeklyDisplay();
+            
+            // Roulette button
+            updateRouletteButton();
+            
+            // Activity feed
+            updateActivityFeed();
+            
+            // Test history
+            updateTestHistory();
+        }
+
+        // Update weekly display
+        function updateWeeklyDisplay() {
+            const days = ['mon', 'wed', 'fri'];
+            days.forEach(day => {
+                const element = document.getElementById(day);
+                if (!element) return;
+                
+                const status = programState.thisWeek[day];
+                
+                // Reset classes
+                element.className = 'week-day w-12 h-12 rounded-full flex items-center justify-center text-sm font-semibold';
+                
+                if (status === 'negative') {
+                    element.classList.add('completed');
+                } else if (status === 'positive') {
+                    element.classList.add('missed');
+                } else {
+                    element.classList.add('bg-gray-200');
+                }
+            });
+            
+            // Weekly bonus
+            const weeklyBonus = programState.weekNegatives === 3 ? 5 : 0;
+            if (document.getElementById('weeklyBonus')) {
+                document.getElementById('weeklyBonus').textContent = `$${weeklyBonus}`;
+            }
+        }
+
+        // Update roulette button
+        function updateRouletteButton() {
+            const button = document.getElementById('rouletteButton');
+            if (!button) return;
+            
+            if (programState.pointBalance >= 25) {
+                button.classList.remove('bg-gray-300', 'text-gray-600', 'opacity-75', 'cursor-not-allowed');
+                button.classList.add('bg-white', 'text-teal-600', 'hover:bg-gray-100', 'cursor-pointer');
+                button.textContent = '🎰 Spin Evidence-Based Roulette!';
+                button.disabled = false;
+            } else {
+                const needed = 25 - programState.pointBalance;
+                button.textContent = `🔒 Earn ${needed} more points to unlock spin`;
+                button.classList.add('bg-gray-300', 'text-gray-600', 'opacity-75', 'cursor-not-allowed');
+                button.disabled = true;
+            }
+        }
+
+        // Update activity feed
+        function updateActivityFeed() {
+            const container = document.getElementById('activityFeed');
+            if (!container) return;
+            
+            if (programState.incentivesLog.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center p-6 text-gray-500">
+                        <p>Complete your first test to start earning!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = programState.incentivesLog.slice(-5).reverse().map(log => `
+                <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                    <div class="flex items-center">
+                        <span class="text-xl mr-3">${log.type === 'cash' ? '💰' : '✅'}</span>
+                        <div>
+                            <p class="font-semibold text-sm">${log.reason}</p>
+                            <p class="text-xs text-gray-600">${new Date(log.timestamp).toLocaleTimeString()}</p>
+                        </div>
+                    </div>
+                    <span class="text-green-600 font-semibold">${log.type === 'cash' ? '$' + log.amount : '+' + log.amount}</span>
+                </div>
+            `).join('');
+        }
+
+        // Update test history
+        function updateTestHistory() {
+            const container = document.getElementById('testHistory');
+            if (!container) return;
+            
+            if (programState.testHistory.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-gray-50 rounded-lg p-4 text-center">
+                        <p class="text-gray-600 text-sm">No tests completed yet</p>
+                        <p class="text-gray-500 text-xs mt-1">Complete your first test to start your streak!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = programState.testHistory.slice(-3).reverse().map(test => `
+                <div class="flex items-center justify-between p-3 ${test.result === 'negative' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'} rounded-lg border">
+                    <div class="flex items-center">
+                        <span class="text-xl mr-3">${test.result === 'negative' ? '✅' : '❌'}</span>
+                        <div>
+                            <p class="font-semibold text-sm">${test.result === 'negative' ? 'Negative' : 'Positive'} Test</p>
+                            <p class="text-xs text-gray-600">${test.date.toLocaleDateString()}</p>
+                            ${test.result === 'negative' ? `<p class="text-xs text-gray-500">Streak: ${test.streakAtTest}</p>` : ''}
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="${test.result === 'negative' ? 'text-green-600' : 'text-red-600'} font-semibold">
+                            ${test.result === 'negative' ? '+' + test.pointsEarned : '0'}
+                        </span>
+                        ${test.spinsEarned > 0 ? `<p class="text-xs text-purple-600">${test.spinsEarned} spin${test.spinsEarned !== 1 ? 's' : ''}</p>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Drug test simulation
+        function startDrugTest() {
+            document.getElementById('drugTestModal').classList.remove('hidden');
+            document.getElementById('videoCall').classList.remove('hidden');
+            logEvent('EVIDENCE_BASED_TEST_STARTED', 'TESTS');
+        }
+
+        function nextTestStep(step) {
+            // Hide current step
+            document.querySelectorAll('.test-step').forEach(el => el.classList.add('hidden'));
+            
+            // Show next step
+            if (step === 'seal') {
+                document.getElementById('sealStep').classList.remove('hidden');
+            } else if (step === 'sample') {
+                document.getElementById('sampleStep').classList.remove('hidden');
+            } else if (step === 'waiting') {
+                document.getElementById('waitingStep').classList.remove('hidden');
+            }
+            
+            logEvent('TEST_STEP_' + step.toUpperCase(), 'DRUG_TEST');
+        }
+
+        function processTestResult() {
+            // For demo, always simulate negative test
+            const outcome = onTestResult('negative');
+            
+            // Update result display
+            document.getElementById('finalResultEmoji').textContent = '🎉';
+            document.getElementById('finalResultText').textContent = 'NEGATIVE!';
+            document.getElementById('finalResultSub').textContent = `Streak: ${outcome.newStreak} days!`;
+            document.getElementById('finalResultMsg').textContent = `Amazing! Your streak is now ${outcome.newStreak}! Next test will be worth ${programState.nextPoints} points!`;
+            document.getElementById('finalPointsEarned').textContent = `+${outcome.pointsEarned} Points Earned!`;
+            
+            if (outcome.spinsEarned > 0) {
+                document.getElementById('automaticSpins').classList.remove('hidden');
+                document.getElementById('spinsEarned').textContent = `🎰 ${outcome.spinsEarned} automatic spin${outcome.spinsEarned !== 1 ? 's' : ''} earned!`;
+            }
+            
+            // Hide current step and show results
+            document.querySelectorAll('.test-step').forEach(el => el.classList.add('hidden'));
+            document.getElementById('resultsStep').classList.remove('hidden');
+            
+            logEvent('EVIDENCE_BASED_TEST_COMPLETED', 'TESTS');
+        }
+
+        function completeDrugTest() {
+            updateDisplay();
+            closeDrugTest();
+            showDashboardView('wallet');
+        }
+
+        function closeDrugTest() {
+            document.getElementById('drugTestModal').classList.add('hidden');
+            document.querySelectorAll('.test-step').forEach(el => el.classList.add('hidden'));
+            document.getElementById('videoCall').classList.remove('hidden');
+            document.getElementById('automaticSpins').classList.add('hidden');
+        }
+
+        // CRA session completion
+        function completeCRASession() {
+            if (programState.currentCraSession <= 12) {
+                programState.craSessionsDone = programState.currentCraSession;
+                programState.currentCraSession = Math.min(programState.currentCraSession + 1, 12);
+                
+                // Award homework points (evidence-based)
+                programState.pointBalance += 5;
+                logIncentive(5, `CRA Session ${programState.craSessionsDone} homework completed`);
+                
+                updateDisplay();
+                alert(`CRA Session ${programState.craSessionsDone} completed! +5 points earned for homework.`);
+                logEvent(`CRA_SESSION_${programState.craSessionsDone}_COMPLETED`, 'CRA');
+            }
+        }
+
+        // Roulette functions
+        function checkRouletteEligibility() {
+            if (programState.pointBalance >= 25) {
+                document.getElementById('rouletteModal').classList.remove('hidden');
+                logEvent('EVIDENCE_BASED_ROULETTE_OPENED', 'WALLET');
+            }
+        }
+
+        function spinRoulette() {
+            const button = document.getElementById('spinButton');
+            const wheel = document.getElementById('rouletteWheel');
+            
+            button.disabled = true;
+            button.textContent = '🎰 SPINNING... 🎰';
+            
+            // Visual animation
+            const finalRotation = 1800 + Math.random() * 360;
+            wheel.style.transform = `rotate(${finalRotation}deg)`;
+            
+            setTimeout(() => {
+                const winAmount = awardSpin();
+                loadCash(winAmount, 'Manual roulette spin');
+                
+                document.getElementById('winAmount').textContent = `YOU WON $${winAmount}!`;
+                document.getElementById('spinResult').classList.remove('hidden');
+                button.classList.add('hidden');
+                
+                updateDisplay();
+                logEvent(`EVIDENCE_ROULETTE_WON_$${winAmount}`, 'WALLET');
+            }, 3000);
+        }
+
+        function closeRoulette() {
+            document.getElementById('rouletteModal').classList.add('hidden');
+            document.getElementById('spinResult').classList.add('hidden');
+            document.getElementById('spinButton').classList.remove('hidden');
+            document.getElementById('spinButton').disabled = false;
+            document.getElementById('spinButton').textContent = '🎰 Spin Evidence-Based Roulette! 🎰';
+            
+            // Reset wheel
+            const wheel = document.getElementById('rouletteWheel');
+            wheel.style.transform = 'rotate(0deg)';
+            wheel.style.transition = 'none';
+            setTimeout(() => {
+                wheel.style.transition = 'transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            }, 100);
+        }
+
+        // Guided tour functions
+        function startGuidedTour() {
+            currentTourStep = 0;
+            document.getElementById('tourOverlay').classList.remove('hidden');
+            navigateTo('dashboard');
+            setTimeout(() => {
+                showTourStep(0);
+            }, 500);
+            logEvent('EVIDENCE_BASED_TOUR_STARTED', 'SUCCESS');
+        }
+
+        function showTourStep(stepIndex) {
+            const step = tourSteps[stepIndex];
+            const tourContent = document.getElementById('tourContent');
+            const tourModal = document.getElementById('tourModal');
+            const tourSpotlight = document.getElementById('tourSpotlight');
+            const nextBtn = document.getElementById('tourNextBtn');
+
+            // Update content
+            tourContent.innerHTML = `
+                <h3 class="text-xl font-bold text-gray-800 mb-3">${step.title}</h3>
+                <p class="text-gray-600">${step.content}</p>
+            `;
+
+            // Update progress dots
+            updateTourProgress(stepIndex);
+
+            // Update next button
+            nextBtn.textContent = stepIndex === tourSteps.length - 1 ? 'Finish' : 'Next';
+
+            // Position modal and spotlight
+            if (step.target) {
+                const targetElement = document.querySelector(step.target);
+                if (targetElement) {
+                    const rect = targetElement.getBoundingClientRect();
+                    
+                    // Position spotlight
+                    tourSpotlight.style.left = (rect.left - 10) + 'px';
+                    tourSpotlight.style.top = (rect.top - 10) + 'px';
+                    tourSpotlight.style.width = (rect.width + 20) + 'px';
+                    tourSpotlight.style.height = (rect.height + 20) + 'px';
+                    tourSpotlight.classList.remove('hidden');
+                    
+                    // Position modal
+                    if (step.position === 'top') {
+                        tourModal.style.left = Math.max(20, Math.min(window.innerWidth - 340, rect.left - 100)) + 'px';
+                        tourModal.style.top = Math.max(20, rect.top - 220) + 'px';
+                        tourModal.style.transform = 'none';
+                    } else if (step.position === 'bottom') {
+                        tourModal.style.left = Math.max(20, Math.min(window.innerWidth - 340, rect.left - 100)) + 'px';
+                        tourModal.style.top = Math.min(window.innerHeight - 250, rect.bottom + 20) + 'px';
+                        tourModal.style.transform = 'none';
+                    }
+                } else {
+                    tourSpotlight.classList.add('hidden');
+                }
+            } else {
+                // Center modal for steps without targets
+                tourSpotlight.classList.add('hidden');
+                tourModal.style.left = '50%';
+                tourModal.style.top = '50%';
+                tourModal.style.transform = 'translate(-50%, -50%)';
+            }
+
+            // Execute step action
+            executeStepAction(step.action);
+        }
+
+        function executeStepAction(action) {
+            switch(action) {
+                case 'show-dashboard':
+                    showDashboardView('wallet');
+                    break;
+                case 'show-tests':
+                    showDashboardView('tests');
+                    break;
+                case 'start-test':
+                    // Will be handled by user interaction
+                    break;
+                case 'show-roulette':
+                    showDashboardView('wallet');
+                    break;
+                case 'show-cra':
+                    showDashboardView('therapy');
+                    break;
+                case 'show-compliance':
+                    showDashboardView('wallet');
+                    break;
+            }
+        }
+
+        function updateTourProgress(currentStep) {
+            const progressContainer = document.getElementById('tourProgress');
+            const dots = tourSteps.map((_, index) => {
+                const active = index <= currentStep ? 'bg-teal-500' : 'bg-gray-300';
+                return `<div class="w-3 h-3 rounded-full ${active}"></div>`;
+            }).join('');
+            progressContainer.innerHTML = dots;
+        }
+
+        function nextTourStep() {
+            if (currentTourStep < tourSteps.length - 1) {
+                currentTourStep++;
+                showTourStep(currentTourStep);
+                logEvent('TOUR_STEP_' + currentTourStep, 'EVIDENCE_TOUR');
+            } else {
+                completeTour();
+            }
+        }
+
+        function skipTour() {
+            completeTour();
+            logEvent('EVIDENCE_TOUR_SKIPPED', 'EVIDENCE_TOUR');
+        }
+
+        function completeTour() {
+            document.getElementById('tourOverlay').classList.add('hidden');
+            showDashboardView('wallet');
+            logEvent('EVIDENCE_TOUR_COMPLETED', 'EVIDENCE_TOUR');
+        }
+
+        // Dashboard navigation
+        function showDashboardView(viewName) {
+            // Hide all dashboard views
+            document.querySelectorAll('.dashboard-view').forEach(view => {
+                view.classList.add('hidden');
+            });
+            
+            // Show selected view
+            document.getElementById(viewName + '-view').classList.remove('hidden');
+            
+            // Update tab states
+            document.querySelectorAll('.dashboard-tab').forEach(tab => {
+                tab.classList.remove('text-teal-500');
+                tab.classList.add('text-gray-400');
+            });
+            
+            // Highlight active tab
+            if (event && event.target) {
+                event.target.closest('.dashboard-tab').classList.remove('text-gray-400');
+                event.target.closest('.dashboard-tab').classList.add('text-teal-500');
+            }
+            
+            logEvent('TAB_SWITCH', viewName.toUpperCase());
+        }
+
+        // Navigation
+        function navigateTo(screenId) {
+            const currentScreen = document.querySelector('.screen.active');
+            const nextScreen = document.getElementById(screenId);
+            
+            logEvent('NAVIGATE', screenId.toUpperCase());
+            
+            currentScreen.classList.remove('active');
+            setTimeout(() => {
+                nextScreen.classList.add('active');
+                nextScreen.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 150);
+        }
+
+        // Medicaid eligibility check
+        function checkEligibility() {
+            const input = document.getElementById('medicaidInput');
+            const result = document.getElementById('eligibilityResult');
+            
+            if (input.value.trim()) {
+                result.innerHTML = '<div class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg"><p class="text-yellow-700">🔄 Checking eligibility...</p></div>';
+                result.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    result.innerHTML = `
+                        <div class="p-3 bg-green-50 border border-green-200 rounded-lg">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-green-600">✅</span>
+                                <div class="text-sm">
+                                    <p class="font-semibold text-green-800">Eligible - Targeted Adult Medicaid</p>
+                                    <p class="text-green-600">Route: FFS Medicaid (H0038)</p>
+                                    <p class="text-green-600">County: Salt Lake | No PMHP enrollment</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    logEvent('MEDICAID_VERIFIED', 'INTAKE');
+                }, 1500);
+            }
+        }
+
+        // Analytics
+        function logEvent(action, screen) {
+            console.log(`[REACH Evidence-Based] ${action} - Screen: ${screen} - Time: ${new Date().toISOString()}`);
+            
+            // Log evidence-based metrics
+            if (!programState.analyticsLog) programState.analyticsLog = [];
+            programState.analyticsLog.push({
+                action,
+                screen,
+                timestamp: new Date().toISOString(),
+                streak: programState.streak,
+                cashEarned: programState.cashEarned,
+                pointBalance: programState.pointBalance
+            });
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDisplay();
+            logEvent('EVIDENCE_BASED_APP_LOADED', 'WELCOME');
+        });
+
+        // Expose state for debugging
+        window.programState = programState;
+        window.tourSteps = tourSteps;
+    </script>
+</body>
+</html>
