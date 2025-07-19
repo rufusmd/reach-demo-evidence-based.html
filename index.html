@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REACH 2.0 - Evidence-Based Recovery</title>
+    <title>Recovery Rewards - Start Your Journey</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -115,7 +115,7 @@
             top: 50%;
             left: 50%;
         }
-        /* Evidence-based positioning for research accuracy */
+        /* Prize wheel positioning */
         .roulette-number:nth-child(1) { transform: translate(-50%, -50%) rotate(90deg) translateY(-5rem) rotate(-90deg); }   /* $5 at bottom */
         .roulette-number:nth-child(2) { transform: translate(-50%, -50%) rotate(216deg) translateY(-5rem) rotate(-216deg); } /* $10 at 216° */
         .roulette-number:nth-child(3) { transform: translate(-50%, -50%) rotate(270deg) translateY(-5rem) rotate(-270deg); } /* $15 at 270° */
@@ -141,7 +141,7 @@
         .cash-progress {
             background: linear-gradient(90deg, #10b981 0%, #059669 100%);
         }
-        .evidence-badge {
+        .reward-badge {
             background: linear-gradient(45deg, #3b82f6, #1d4ed8);
             color: white;
             font-size: 0.75rem;
@@ -161,11 +161,8 @@
                     <span class="text-3xl text-white">🏆</span>
                 </div>
                 <h1 class="text-3xl font-bold text-gray-800 mb-4">Recovery Starts Here</h1>
-                <p class="text-gray-600 text-lg">Evidence-based rewards for lasting recovery</p>
-                <div class="mt-4 space-y-2">
-                    <div class="evidence-badge inline-block">3 tests/week • Streak bonuses</div>
-                    <div class="evidence-badge inline-block ml-2">Real cash rewards</div>
-                </div>
+                <p class="text-gray-600 text-lg">Earn real cash rewards for staying clean</p>
+                <p class="text-sm text-gray-500 mt-2">Test clean, earn points, win money</p>
             </div>
             <button onclick="navigateTo('intake')" class="w-full bg-teal-500 text-white py-4 px-6 rounded-xl text-lg font-semibold hover:bg-teal-600 transition-colors">
                 Begin in ED
@@ -177,7 +174,7 @@
             <div class="mb-6">
                 <button onclick="navigateTo('welcome')" class="text-teal-500 mb-4">← Back</button>
                 <h2 class="text-2xl font-bold text-gray-800 mb-2">Quick Intake</h2>
-                <p class="text-sm text-gray-600">Start your evidence-based recovery program!</p>
+                <p class="text-sm text-gray-600">Start your recovery rewards program!</p>
             </div>
             
             <div class="flex-1 space-y-4 mb-6">
@@ -226,21 +223,21 @@
         <section id="success" class="screen p-6 h-screen flex flex-col">
             <div class="text-center mb-6">
                 <div class="text-6xl mb-4">🎉</div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Welcome to Evidence-Based Recovery!</h2>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Welcome to Your Recovery Program!</h2>
                 <div class="points-badge text-white py-2 px-4 rounded-full inline-block mb-4">
-                    <span class="font-bold">Program Initialized!</span>
+                    <span class="font-bold">Let's Get Started!</span>
                 </div>
-                <p class="text-sm text-gray-600">Your streak starts at 0 • Next test worth 25 points</p>
+                <p class="text-sm text-gray-600">Your first clean test will earn you 25 points</p>
             </div>
             
             <!-- Interactive Tour Launch -->
             <div class="flex-1 mb-6 flex flex-col justify-center">
                 <div class="bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl p-6 text-white text-center">
-                    <div class="text-4xl mb-3">🔬</div>
-                    <h3 class="text-lg font-bold mb-2">Ready to explore Evidence-Based CM?</h3>
-                    <p class="text-sm mb-4 opacity-90">Take a quick tour to see how research-backed rewards work: streak escalation, variable-ratio prizes, and CRA integration</p>
+                    <div class="text-4xl mb-3">💰</div>
+                    <h3 class="text-lg font-bold mb-2">Ready to see how you earn cash?</h3>
+                    <p class="text-sm mb-4 opacity-90">Take a quick tour to learn how you can earn points and win real money through your recovery</p>
                     <button onclick="startGuidedTour()" class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                        🚀 Start Evidence-Based Tour
+                        🚀 Show Me How It Works
                     </button>
                 </div>
             </div>
@@ -256,7 +253,7 @@
             <div class="flex-1 overflow-y-auto">
                 <!-- Enhanced Wallet View -->
                 <div id="wallet-view" class="dashboard-view p-6">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Evidence-Based Dashboard</h2>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Your Recovery Dashboard</h2>
                     
                     <!-- Streak & Points Display -->
                     <div class="grid grid-cols-2 gap-4 mb-6">
@@ -282,14 +279,13 @@
                             <div class="cash-progress h-3 rounded-full" id="cashProgress" style="width: 0%"></div>
                         </div>
                         <div class="text-xs text-green-700">
-                            <span class="evidence-badge">OIG Compliant</span> 
-                            Annual cap: $605.90 • <span id="cashRemaining">$605.90</span> remaining
+                            Annual limit: $605.90 • <span id="cashRemaining">$605.90</span> remaining
                         </div>
                     </div>
 
                     <!-- Weekly Progress -->
                     <div class="bg-white border-2 border-gray-200 rounded-xl p-4 mb-6">
-                        <h3 class="font-semibold text-gray-800 mb-3">This Week's Tests (M/W/F Schedule)</h3>
+                        <h3 class="font-semibold text-gray-800 mb-3">This Week's Tests</h3>
                         <div class="flex justify-between items-center">
                             <div class="flex space-x-2">
                                 <div class="week-day w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-sm font-semibold" id="mon">M</div>
@@ -302,16 +298,15 @@
                             </div>
                         </div>
                         <div class="mt-2">
-                            <span class="evidence-badge">Research-Based</span>
-                            <span class="text-xs text-gray-600 ml-2">Complete all 3 tests this week for $5 bonus!</span>
+                            <span class="text-xs text-gray-600">Complete all 3 tests this week for $5 bonus!</span>
                         </div>
                     </div>
                     
                     <!-- Roulette Section -->
                     <div class="bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl p-6 text-white mb-6">
                         <div class="text-center">
-                            <h3 class="text-lg font-semibold mb-2">Evidence-Based Roulette</h3>
-                            <p class="text-sm opacity-90 mb-4">Research-proven prize draw • $10 expected value</p>
+                            <h3 class="text-lg font-semibold mb-2">Cash Prize Wheel</h3>
+                            <p class="text-sm opacity-90 mb-4">Spin to win cash prizes when you have 25+ points!</p>
                             <button id="rouletteButton" onclick="checkRouletteEligibility()" class="bg-gray-300 text-gray-600 px-6 py-2 rounded-full font-semibold opacity-75 cursor-not-allowed flex items-center justify-center mx-auto">
                                 🔒 Earn 25 points to unlock spin
                             </button>
@@ -328,14 +323,12 @@
 
                 <!-- Drug Tests View -->
                 <div id="tests-view" class="dashboard-view p-6 hidden">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Evidence-Based Testing</h2>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Drug Testing</h2>
                     
                     <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white mb-6">
-                        <h3 class="text-lg font-semibold mb-2">Streak-Based Rewards</h3>
-                        <p class="mb-4">Your next negative test is worth <span id="testRewardPoints" class="font-bold">25</span> points!</p>
-                        <div class="text-sm opacity-90 mb-4">
-                            <span class="evidence-badge bg-white text-green-600">Formula: 25 + (5 × streak)</span>
-                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Build Your Streak</h3>
+                        <p class="mb-4">Your next clean test is worth <span id="testRewardPoints" class="font-bold">25</span> points!</p>
+                        <p class="text-sm opacity-90 mb-4">Keep testing clean to earn more points each time</p>
                         <button onclick="startDrugTest()" class="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold">
                             🧪 Start Guided Test
                         </button>
@@ -350,23 +343,21 @@
                     </div>
                 </div>
 
-                <!-- CRA Sessions View -->
+                <!-- Recovery Sessions View -->
                 <div id="therapy-view" class="dashboard-view p-6 hidden">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-6">CRA Sessions</h2>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Recovery Sessions</h2>
                     
                     <div class="bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl p-6 text-white mb-6">
-                        <h3 class="text-lg font-semibold mb-2">Week <span id="currentWeek">1</span>: Functional Analysis</h3>
-                        <p class="mb-4">Understanding your triggers and patterns</p>
-                        <div class="text-sm opacity-90 mb-4">
-                            <span class="evidence-badge bg-white text-orange-600">CRA + CM = Lowest NNT</span>
-                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Session <span id="currentWeek">1</span>: Understanding Triggers</h3>
+                        <p class="mb-4">Learn about what leads to using and how to avoid it</p>
+                        <p class="text-sm opacity-90 mb-4">Complete homework assignments for bonus points</p>
                         <button onclick="completeCRASession()" class="bg-white text-orange-600 px-4 py-2 rounded-lg font-semibold">
                             📚 Complete Session (+5 pts)
                         </button>
                     </div>
                     
                     <div class="space-y-3" id="craSchedule">
-                        <!-- CRA schedule will be populated -->
+                        <!-- Recovery sessions schedule will be populated -->
                     </div>
                 </div>
 
@@ -382,7 +373,7 @@
                                 </div>
                                 <div>
                                     <p class="font-semibold">Cam Rodriguez</p>
-                                    <p class="text-sm text-gray-600">MSW - CRA Specialist</p>
+                                    <p class="text-sm text-gray-600">MSW - Recovery Specialist</p>
                                     <p class="text-xs text-teal-600">Online now</p>
                                 </div>
                             </div>
@@ -405,7 +396,7 @@
 
                 <!-- To-Dos View -->
                 <div id="todos-view" class="dashboard-view p-6 hidden">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Evidence-Based Activities</h2>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Today's Activities</h2>
                     
                     <div class="space-y-4">
                         <div class="border border-orange-200 bg-orange-50 rounded-lg p-4">
@@ -414,15 +405,15 @@
                                     <p class="font-semibold">Take Drug Test</p>
                                     <p class="text-sm text-gray-600">Next reward: <span id="todoTestPoints">25</span> points</p>
                                 </div>
-                                <span class="evidence-badge">Streak: <span id="todoStreak">0</span></span>
+                                <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-sm font-semibold">Streak: <span id="todoStreak">0</span></span>
                             </div>
                         </div>
                         
                         <div class="border border-green-200 bg-green-50 rounded-lg p-4">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="font-semibold">Complete CRA Homework</p>
-                                    <p class="text-sm text-gray-600">List 5 sober activities</p>
+                                    <p class="font-semibold">Complete Recovery Session</p>
+                                    <p class="text-sm text-gray-600">Learn about healthy activities</p>
                                 </div>
                                 <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm font-semibold">+5 pts</span>
                             </div>
@@ -449,7 +440,7 @@
                             J
                         </div>
                         <h3 class="text-xl font-semibold">John Doe</h3>
-                        <p class="text-gray-600">Evidence-Based Program • Week <span id="profileWeek">1</span> of 12</p>
+                        <p class="text-gray-600">Recovery Program • Week <span id="profileWeek">1</span> of 12</p>
                     </div>
                     
                     <div class="space-y-4">
@@ -466,7 +457,7 @@
                                 </div>
                             </div>
                             <div class="mt-4 text-center">
-                                <span class="evidence-badge">Evidence-Based CM Protocol</span>
+                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">Recovery Program</span>
                             </div>
                         </div>
                         
@@ -486,7 +477,7 @@
                     </button>
                     <button onclick="showDashboardView('therapy')" class="dashboard-tab flex flex-col items-center p-1 text-gray-400">
                         <span class="text-lg mb-1">📚</span>
-                        <span class="text-xs">CRA</span>
+                        <span class="text-xs">Sessions</span>
                     </button>
                     <button onclick="showDashboardView('tests')" class="dashboard-tab flex flex-col items-center p-1 text-gray-400">
                         <span class="text-lg mb-1">🧪</span>
@@ -570,7 +561,7 @@
                 
                 <div class="p-4 bg-white">
                     <div class="bg-blue-50 p-3 rounded-lg mb-4">
-                        <p class="text-sm text-blue-800">"Hi! Ready for your evidence-based saliva test? This will be worth <span id="currentTestPoints">25</span> points if negative!"</p>
+                        <p class="text-sm text-blue-800">"Hi! Ready for your saliva test? This will be worth <span id="currentTestPoints">25</span> points if it comes back clean!"</p>
                     </div>
                     <button onclick="nextTestStep('seal')" class="w-full bg-teal-500 text-white py-3 rounded-lg font-semibold">
                         Show Seal & QR Code
@@ -623,7 +614,7 @@
                     </div>
                     
                     <div class="bg-blue-50 p-3 rounded-lg mb-4">
-                        <p class="text-sm text-blue-800">"Take your time. Remember, this is part of your evidence-based recovery program!"</p>
+                        <p class="text-sm text-blue-800">"Take your time. Remember, this is part of your recovery program!"</p>
                     </div>
                 </div>
                 
@@ -651,7 +642,7 @@
                     </div>
                     
                     <div class="bg-green-50 p-3 rounded-lg mb-4">
-                        <p class="text-sm text-green-800">"While we wait: How are you feeling about your recovery journey? The research shows you're on the right path!"</p>
+                        <p class="text-sm text-green-800">"While we wait: How are you feeling about your recovery journey? You're doing great!"</p>
                     </div>
                 </div>
                 
@@ -672,7 +663,7 @@
                 <div class="flex-1 p-6 flex flex-col justify-center">
                     <div class="text-center mb-6">
                         <div class="text-8xl mb-4" id="finalResultEmoji">🎉</div>
-                        <h3 class="text-2xl font-bold text-green-600 mb-2" id="finalResultText">NEGATIVE!</h3>
+                        <h3 class="text-2xl font-bold text-green-600 mb-2" id="finalResultText">CLEAN!</h3>
                         <p class="text-lg text-gray-600" id="finalResultSub">Streak extended!</p>
                     </div>
                     
@@ -685,7 +676,7 @@
                     </div>
                     
                     <div id="automaticSpins" class="hidden streak-badge text-white py-2 px-4 rounded-full text-center mb-4">
-                        <span class="font-bold text-sm" id="spinsEarned">🎰 Automatic spin earned!</span>
+                        <span class="font-bold text-sm" id="spinsEarned">🎰 You can now spin the wheel!</span>
                     </div>
                 </div>
                 
@@ -702,12 +693,9 @@
     <div id="rouletteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
         <div class="max-w-sm mx-auto bg-white h-full flex flex-col justify-center p-6">
             <div class="text-center mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Evidence-Based Roulette!</h2>
-                <p class="text-gray-600">Research-proven prize draw contingency management</p>
-                <div class="mt-4">
-                    <span class="evidence-badge">$10 Expected Value</span>
-                    <span class="evidence-badge ml-2">25 Point Cost</span>
-                </div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Cash Prize Wheel!</h2>
+                <p class="text-gray-600">Spin to win real cash prizes</p>
+                <p class="text-sm text-gray-500 mt-2">Cost: 25 points</p>
             </div>
             
             <div class="relative mb-8">
@@ -718,7 +706,7 @@
                         <div class="w-4 h-4 bg-white rounded-full z-10"></div>
                     </div>
                     
-                    <!-- Evidence-based prize amounts -->
+                    <!-- Prize amounts -->
                     <div class="roulette-numbers">
                         <div class="roulette-number">$5</div>
                         <div class="roulette-number">$10</div>
@@ -734,26 +722,26 @@
                 </div>
             </div>
             
-            <!-- Probability Display -->
+            <!-- Prize Display -->
             <div class="bg-gray-50 rounded-lg p-3 mb-4 text-xs">
-                <p class="font-semibold text-center mb-2">Research-Based Probabilities:</p>
+                <p class="font-semibold text-center mb-2">Possible Prizes:</p>
                 <div class="grid grid-cols-5 gap-1 text-center">
-                    <div>$5<br><span class="text-gray-600">50%</span></div>
-                    <div>$10<br><span class="text-gray-600">20%</span></div>
-                    <div>$15<br><span class="text-gray-600">10%</span></div>
-                    <div>$25<br><span class="text-gray-600">10%</span></div>
-                    <div>$30<br><span class="text-gray-600">10%</span></div>
+                    <div>$5<br><span class="text-gray-600">Most common</span></div>
+                    <div>$10<br><span class="text-gray-600">Common</span></div>
+                    <div>$15<br><span class="text-gray-600">Uncommon</span></div>
+                    <div>$25<br><span class="text-gray-600">Rare</span></div>
+                    <div>$30<br><span class="text-gray-600">Very rare</span></div>
                 </div>
             </div>
             
             <button onclick="spinRoulette()" id="spinButton" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-4 rounded-xl text-lg font-bold">
-                🎰 Spin Evidence-Based Roulette! 🎰
+                🎰 Spin for Cash Prize! 🎰
             </button>
             
             <div id="spinResult" class="hidden mt-6 text-center">
                 <div class="text-6xl mb-2">🎊</div>
                 <h3 class="text-3xl font-bold text-green-600 mb-2" id="winAmount">YOU WON $15!</h3>
-                <p class="text-gray-600 mb-4">Real cash added to your recovery account!</p>
+                <p class="text-gray-600 mb-4">Real cash added to your account!</p>
                 <button onclick="closeRoulette()" class="bg-teal-500 text-white px-6 py-3 rounded-lg font-semibold">
                     Collect Winnings
                 </button>
@@ -762,13 +750,13 @@
     </div>
 
     <script>
-        // Evidence-based program state
+        // Recovery program state
         let programState = {
             // Patient tracking
             enrollmentDate: new Date(),
             currentWeek: 1,
             
-            // Evidence-based CM mechanics
+            // Core mechanics
             streak: 0,                    // consecutive negative tests
             nextPoints: 25,               // 25 + (5 * streak)
             pointBalance: 0,              // current points available
@@ -782,12 +770,12 @@
                 fri: null
             },
             
-            // CRA progress
-            craSessionsDone: 0,           // 0-12
-            currentCraSession: 1,
+            // Recovery progress
+            sessionsDone: 0,              // 0-12
+            currentSession: 1,
             
-            // Evidence-based caps
-            maxCash: 605.90,              // OIG-compliant annual cap
+            // Program caps
+            maxCash: 605.90,              // Annual cap
             
             // Audit trail
             incentivesLog: [],
@@ -796,95 +784,87 @@
 
         let currentTourStep = 0;
 
-        // Evidence-based guided tour steps
+        // Guided tour steps (made more patient-friendly)
         const tourSteps = [
             {
-                title: "Welcome to Evidence-Based CM! 🔬",
-                content: "This app uses research-proven contingency management. Your rewards escalate with your streak: 25 points for first negative test, then +5 more for each consecutive negative!",
+                title: "Welcome to Recovery Rewards! 💰",
+                content: "This app helps you earn real cash for staying clean. You get points for negative tests - the longer your streak, the more points you earn!",
                 target: null,
                 position: "center",
-                action: "highlight-science"
+                action: "highlight-rewards"
             },
             {
-                title: "Streak-Based Escalation 🔥",
-                content: "See your current streak and next reward amount. Research shows escalating rewards improve outcomes by ~15 percentage points vs. flat rewards.",
+                title: "Your Streak Builds Points 🔥",
+                content: "See your current streak and next reward amount. The longer you stay clean, the more points each test is worth!",
                 target: ".streak-badge",
                 position: "bottom",
                 action: "show-dashboard"
             },
             {
-                title: "Evidence-Based Testing 🧪",
-                content: "Your testing follows the proven 3×/week schedule (Monday/Wednesday/Friday) that shows the best outcomes in clinical trials.",
+                title: "Regular Testing Schedule 🧪",
+                content: "You'll test 3 times per week (Monday, Wednesday, Friday) to track your progress and earn rewards.",
                 target: "button[onclick=\"showDashboardView('tests')\"]",
                 position: "top",
                 action: "show-tests"
             },
             {
-                title: "Complete Your First Test 📱",
-                content: "Let's simulate a negative test to see the evidence-based escalation in action. Notice how your streak affects your next reward!",
+                title: "Take Your First Test 📱",
+                content: "Let's simulate a clean test to see how you earn points and build your streak!",
                 target: "button[onclick=\"startDrugTest()\"]",
                 position: "bottom",
                 action: "start-test"
             },
             {
-                title: "Research-Backed Roulette 🎰",
-                content: "Our roulette uses proven prize-draw probabilities: $5(50%), $10(20%), $15(10%), $25(10%), $30(10%) with $10 expected value per research.",
+                title: "Win Cash with Prize Wheel 🎰",
+                content: "Use your points to spin for cash prizes: $5, $10, $15, $25, or $30. More points = more chances to win!",
                 target: "#rouletteButton",
                 position: "top",
                 action: "show-roulette"
             },
             {
-                title: "CRA Integration 📚",
-                content: "Combined Contingency Management + Community Reinforcement Approach shows the lowest Number Needed to Treat in addiction research.",
+                title: "Recovery Sessions 📚",
+                content: "Complete recovery sessions to learn new skills and earn bonus points along the way.",
                 target: "button[onclick=\"showDashboardView('therapy')\"]",
                 position: "top",
-                action: "show-cra"
+                action: "show-sessions"
             },
             {
-                title: "OIG-Compliant Cap 💰",
-                content: "Your annual cash cap is $605.90 (inflation-adjusted OIG safe harbor). The app enforces this automatically for regulatory compliance.",
+                title: "Track Your Earnings 💰",
+                content: "Keep track of all the cash you've earned through your recovery journey. The program has an annual limit to keep things fair.",
                 target: "#cashEarned",
                 position: "bottom",
-                action: "show-compliance"
+                action: "show-cash"
             },
             {
-                title: "Ready for Evidence-Based Recovery! 🎉",
-                content: "You now understand how this research-proven system works. Start your recovery journey with confidence in the science!",
+                title: "Ready to Start Earning! 🎉",
+                content: "You now know how to earn points, win cash, and track your progress. Let's start your recovery journey!",
                 target: null,
                 position: "center",
                 action: "complete"
             }
         ];
 
-        // Core evidence-based algorithm: onTestResult
+        // Core algorithm: onTestResult
         function onTestResult(result) {
             const isNegative = result === 'negative';
             
             if (isNegative) {
-                // Award points based on evidence-based escalation
+                // Award points based on escalation
                 const pointsEarned = programState.nextPoints;
                 programState.pointBalance += pointsEarned;
                 programState.streak += 1;
-                programState.nextPoints = 25 + (programState.streak * 5); // Evidence-based formula
+                programState.nextPoints = 25 + (programState.streak * 5); // Escalation formula
                 programState.weekNegatives += 1;
                 
                 // Log the incentive
-                logIncentive(pointsEarned, `Negative test - streak ${programState.streak}`);
+                logIncentive(pointsEarned, `Clean test - streak ${programState.streak}`);
                 
                 // Update weekly progress
                 updateWeeklyProgress(result);
                 
-                // Automatic spins while balance >= 25
                 let spinsEarned = 0;
-                while (programState.pointBalance >= 25) {
-                    const winAmount = awardSpin();
-                    spinsEarned++;
-                    if (winAmount > 0) {
-                        loadCash(winAmount, `Automatic roulette win - spin ${spinsEarned}`);
-                    }
-                }
                 
-                // Check for weekly bonus (evidence-based: $5 for 3 negative tests)
+                // Check for weekly bonus: $5 for 3 negative tests
                 if (programState.weekNegatives === 3) {
                     loadCash(5, "Perfect week bonus");
                     resetWeeklyProgress();
@@ -907,7 +887,7 @@
                 };
                 
             } else {
-                // Reset on positive/missed (evidence-based reset)
+                // Reset on positive/missed
                 programState.streak = 0;
                 programState.nextPoints = 25;
                 programState.weekNegatives = 0;
@@ -931,11 +911,11 @@
             }
         }
 
-        // Evidence-based roulette with research probabilities
+        // Roulette with cash probabilities
         function awardSpin() {
             programState.pointBalance -= 25;
             
-            // Research-backed probabilities: EV = $10
+            // Cash prize probabilities
             const rand = Math.random();
             let winAmount;
             
@@ -954,15 +934,15 @@
             return winAmount;
         }
 
-        // Load cash with OIG-compliant cap enforcement
+        // Load cash with cap enforcement
         function loadCash(amount, reason) {
             if (programState.cashEarned + amount > programState.maxCash) {
                 // Enforce cap
                 const remainingCap = programState.maxCash - programState.cashEarned;
                 if (remainingCap > 0) {
                     programState.cashEarned += remainingCap;
-                    logIncentive(remainingCap, `${reason} (capped at annual limit)`);
-                    alert(`You've reached the annual cap of $${programState.maxCash.toFixed(2)}!`);
+                    logIncentive(remainingCap, `${reason} (annual limit reached)`);
+                    alert(`You've reached the annual limit of $${programState.maxCash.toFixed(2)}!`);
                 }
                 return remainingCap;
             } else {
@@ -977,7 +957,7 @@
             const today = new Date().getDay();
             let dayKey;
             
-            // Map to M/W/F evidence-based schedule
+            // Map to M/W/F schedule
             if (today === 1) dayKey = 'mon';
             else if (today === 3) dayKey = 'wed'; 
             else if (today === 5) dayKey = 'fri';
@@ -1008,12 +988,12 @@
             });
         }
 
-        // Initialize evidence-based program
+        // Initialize program
         function initializeProgram() {
             programState.enrollmentDate = new Date();
             updateDisplay();
             navigateTo('success');
-            logEvent('EVIDENCE_BASED_PROGRAM_INITIALIZED', 'INTAKE');
+            logEvent('PROGRAM_INITIALIZED', 'INTAKE');
         }
 
         // Update all displays
@@ -1024,7 +1004,7 @@
             document.getElementById('nextPoints').textContent = programState.nextPoints;
             document.getElementById('testRewardPoints').textContent = programState.nextPoints;
             document.getElementById('currentTestPoints').textContent = programState.nextPoints;
-            document.getElementById('currentWeek').textContent = programState.currentWeek;
+            document.getElementById('currentWeek').textContent = programState.currentSession;
             document.getElementById('todoTestPoints').textContent = programState.nextPoints;
             document.getElementById('todoStreak').textContent = programState.streak;
             
@@ -1036,7 +1016,7 @@
             
             // Profile stats
             if (document.getElementById('profileWeek')) {
-                document.getElementById('profileWeek').textContent = programState.currentWeek;
+                document.getElementById('profileWeek').textContent = programState.currentSession;
                 document.getElementById('profileStreak').textContent = programState.streak;
                 document.getElementById('profileCash').textContent = `$${programState.cashEarned.toFixed(2)}`;
             }
@@ -1044,7 +1024,7 @@
             // Weekly progress
             updateWeeklyDisplay();
             
-            // Roulette button
+            // Roulette button (FIXED!)
             updateRouletteButton();
             
             // Activity feed
@@ -1082,21 +1062,35 @@
             }
         }
 
-        // Update roulette button
+        // FIXED: Update roulette button properly
         function updateRouletteButton() {
             const button = document.getElementById('rouletteButton');
             if (!button) return;
             
+            console.log('Updating roulette button. Points:', programState.pointBalance); // Debug log
+            
             if (programState.pointBalance >= 25) {
+                // Enable the button
                 button.classList.remove('bg-gray-300', 'text-gray-600', 'opacity-75', 'cursor-not-allowed');
                 button.classList.add('bg-white', 'text-teal-600', 'hover:bg-gray-100', 'cursor-pointer');
-                button.textContent = '🎰 Spin Evidence-Based Roulette!';
+                button.textContent = '🎰 Spin Prize Wheel!';
                 button.disabled = false;
+                
+                // Set the click handler
+                button.onclick = function() { 
+                    document.getElementById('rouletteModal').classList.remove('hidden');
+                    logEvent('ROULETTE_OPENED', 'WALLET');
+                };
             } else {
                 const needed = 25 - programState.pointBalance;
                 button.textContent = `🔒 Earn ${needed} more points to unlock spin`;
+                button.classList.remove('bg-white', 'text-teal-600', 'hover:bg-gray-100', 'cursor-pointer');
                 button.classList.add('bg-gray-300', 'text-gray-600', 'opacity-75', 'cursor-not-allowed');
                 button.disabled = true;
+                
+                button.onclick = function() {
+                    alert(`You need ${needed} more points to spin the wheel!`);
+                };
             }
         }
 
@@ -1167,7 +1161,7 @@
         function startDrugTest() {
             document.getElementById('drugTestModal').classList.remove('hidden');
             document.getElementById('videoCall').classList.remove('hidden');
-            logEvent('EVIDENCE_BASED_TEST_STARTED', 'TESTS');
+            logEvent('TEST_STARTED', 'TESTS');
         }
 
         function nextTestStep(step) {
@@ -1192,27 +1186,36 @@
             
             // Update result display
             document.getElementById('finalResultEmoji').textContent = '🎉';
-            document.getElementById('finalResultText').textContent = 'NEGATIVE!';
+            document.getElementById('finalResultText').textContent = 'CLEAN!';
             document.getElementById('finalResultSub').textContent = `Streak: ${outcome.newStreak} days!`;
             document.getElementById('finalResultMsg').textContent = `Amazing! Your streak is now ${outcome.newStreak}! Next test will be worth ${programState.nextPoints} points!`;
             document.getElementById('finalPointsEarned').textContent = `+${outcome.pointsEarned} Points Earned!`;
             
-            if (outcome.spinsEarned > 0) {
+            // Show spin availability
+            if (programState.pointBalance >= 25) {
                 document.getElementById('automaticSpins').classList.remove('hidden');
-                document.getElementById('spinsEarned').textContent = `🎰 ${outcome.spinsEarned} automatic spin${outcome.spinsEarned !== 1 ? 's' : ''} earned!`;
+                document.getElementById('spinsEarned').textContent = `🎰 You can now spin the wheel!`;
             }
             
             // Hide current step and show results
             document.querySelectorAll('.test-step').forEach(el => el.classList.add('hidden'));
             document.getElementById('resultsStep').classList.remove('hidden');
             
-            logEvent('EVIDENCE_BASED_TEST_COMPLETED', 'TESTS');
+            logEvent('TEST_COMPLETED', 'TESTS');
         }
 
         function completeDrugTest() {
+            // CRITICAL: Update all displays including roulette button
             updateDisplay();
             closeDrugTest();
             showDashboardView('wallet');
+            
+            // Check if user can now spin and notify them
+            if (programState.pointBalance >= 25) {
+                setTimeout(() => {
+                    alert(`🎉 Awesome! You now have ${programState.pointBalance} points. You can spin the prize wheel for cash!`);
+                }, 1000);
+            }
         }
 
         function closeDrugTest() {
@@ -1222,19 +1225,27 @@
             document.getElementById('automaticSpins').classList.add('hidden');
         }
 
-        // CRA session completion
+        // Recovery session completion
         function completeCRASession() {
-            if (programState.currentCraSession <= 12) {
-                programState.craSessionsDone = programState.currentCraSession;
-                programState.currentCraSession = Math.min(programState.currentCraSession + 1, 12);
+            if (programState.currentSession <= 12) {
+                programState.sessionsDone = programState.currentSession;
+                programState.currentSession = Math.min(programState.currentSession + 1, 12);
                 
-                // Award homework points (evidence-based)
+                // Award homework points
                 programState.pointBalance += 5;
-                logIncentive(5, `CRA Session ${programState.craSessionsDone} homework completed`);
+                logIncentive(5, `Session ${programState.sessionsDone} homework completed`);
                 
+                // CRITICAL: Update display immediately to enable spinning
                 updateDisplay();
-                alert(`CRA Session ${programState.craSessionsDone} completed! +5 points earned for homework.`);
-                logEvent(`CRA_SESSION_${programState.craSessionsDone}_COMPLETED`, 'CRA');
+                
+                // Check if user can now spin
+                if (programState.pointBalance >= 25) {
+                    alert(`Session ${programState.sessionsDone} completed! +5 points earned. You now have ${programState.pointBalance} points and can spin the prize wheel!`);
+                } else {
+                    alert(`Session ${programState.sessionsDone} completed! +5 points earned. You now have ${programState.pointBalance} points!`);
+                }
+                
+                logEvent(`SESSION_${programState.sessionsDone}_COMPLETED`, 'RECOVERY');
             }
         }
 
@@ -1242,7 +1253,10 @@
         function checkRouletteEligibility() {
             if (programState.pointBalance >= 25) {
                 document.getElementById('rouletteModal').classList.remove('hidden');
-                logEvent('EVIDENCE_BASED_ROULETTE_OPENED', 'WALLET');
+                logEvent('ROULETTE_OPENED', 'WALLET');
+            } else {
+                const needed = 25 - programState.pointBalance;
+                alert(`You need ${needed} more points to spin the wheel!`);
             }
         }
 
@@ -1259,14 +1273,14 @@
             
             setTimeout(() => {
                 const winAmount = awardSpin();
-                loadCash(winAmount, 'Manual roulette spin');
+                loadCash(winAmount, 'Prize wheel spin');
                 
                 document.getElementById('winAmount').textContent = `YOU WON $${winAmount}!`;
                 document.getElementById('spinResult').classList.remove('hidden');
                 button.classList.add('hidden');
                 
                 updateDisplay();
-                logEvent(`EVIDENCE_ROULETTE_WON_$${winAmount}`, 'WALLET');
+                logEvent(`ROULETTE_WON_${winAmount}`, 'WALLET');
             }, 3000);
         }
 
@@ -1275,7 +1289,7 @@
             document.getElementById('spinResult').classList.add('hidden');
             document.getElementById('spinButton').classList.remove('hidden');
             document.getElementById('spinButton').disabled = false;
-            document.getElementById('spinButton').textContent = '🎰 Spin Evidence-Based Roulette! 🎰';
+            document.getElementById('spinButton').textContent = '🎰 Spin for Cash Prize! 🎰';
             
             // Reset wheel
             const wheel = document.getElementById('rouletteWheel');
@@ -1294,7 +1308,7 @@
             setTimeout(() => {
                 showTourStep(0);
             }, 500);
-            logEvent('EVIDENCE_BASED_TOUR_STARTED', 'SUCCESS');
+            logEvent('TOUR_STARTED', 'SUCCESS');
         }
 
         function showTourStep(stepIndex) {
@@ -1368,10 +1382,10 @@
                 case 'show-roulette':
                     showDashboardView('wallet');
                     break;
-                case 'show-cra':
+                case 'show-sessions':
                     showDashboardView('therapy');
                     break;
-                case 'show-compliance':
+                case 'show-cash':
                     showDashboardView('wallet');
                     break;
             }
@@ -1390,7 +1404,7 @@
             if (currentTourStep < tourSteps.length - 1) {
                 currentTourStep++;
                 showTourStep(currentTourStep);
-                logEvent('TOUR_STEP_' + currentTourStep, 'EVIDENCE_TOUR');
+                logEvent('TOUR_STEP_' + currentTourStep, 'TOUR');
             } else {
                 completeTour();
             }
@@ -1398,13 +1412,13 @@
 
         function skipTour() {
             completeTour();
-            logEvent('EVIDENCE_TOUR_SKIPPED', 'EVIDENCE_TOUR');
+            logEvent('TOUR_SKIPPED', 'TOUR');
         }
 
         function completeTour() {
             document.getElementById('tourOverlay').classList.add('hidden');
             showDashboardView('wallet');
-            logEvent('EVIDENCE_TOUR_COMPLETED', 'EVIDENCE_TOUR');
+            logEvent('TOUR_COMPLETED', 'TOUR');
         }
 
         // Dashboard navigation
@@ -1475,9 +1489,9 @@
 
         // Analytics
         function logEvent(action, screen) {
-            console.log(`[REACH Evidence-Based] ${action} - Screen: ${screen} - Time: ${new Date().toISOString()}`);
+            console.log(`[Recovery Rewards] ${action} - Screen: ${screen} - Time: ${new Date().toISOString()}`);
             
-            // Log evidence-based metrics
+            // Log metrics
             if (!programState.analyticsLog) programState.analyticsLog = [];
             programState.analyticsLog.push({
                 action,
@@ -1492,7 +1506,7 @@
         // Initialize on load
         document.addEventListener('DOMContentLoaded', function() {
             updateDisplay();
-            logEvent('EVIDENCE_BASED_APP_LOADED', 'WELCOME');
+            logEvent('RECOVERY_APP_LOADED', 'WELCOME');
         });
 
         // Expose state for debugging
